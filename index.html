@@ -29,8 +29,11 @@ html, body {
 }
 
 /* ── LANGUAGE VISIBILITY ─────────────────────────────────── */
-html[lang="es"] .en { display:none !important; }
-html[lang="en"] .es { display:none !important; }
+html:not([lang="es"]) .es { display:none !important; }
+html:not([lang="en"]) .en { display:none !important; }
+html:not([lang="nah"]) .nah { display:none !important; }
+/* Nahuatl has no audio narration, so hide the voice toggle in that mode */
+html[lang="nah"] .voice-toggle { display:none !important; }
 
 /* ── TOPBAR ─────────────────────────────────────────────── */
 .topbar{
@@ -373,10 +376,12 @@ html[lang="en"] .es { display:none !important; }
       <div class="topbar-title">
         <span class="es">Deporte Adaptado</span>
         <span class="en">Adapted Sport</span>
+        <span class="nah">Ahuiliztli Tlacencauhtli</span>
       </div>
       <div class="topbar-sub">
         <span class="es">Material Didáctico</span>
         <span class="en">Teaching Material</span>
+        <span class="nah">Tlamachtilamatl</span>
       </div>
     </div>
   </div>
@@ -395,6 +400,7 @@ html[lang="en"] .es { display:none !important; }
     <div class="lang-toggle" role="group" aria-label="Language / Idioma">
       <button class="lang-btn active" id="btnEs" onclick="setLang('es')" aria-pressed="true">ES</button>
       <button class="lang-btn"        id="btnEn" onclick="setLang('en')" aria-pressed="false">EN</button>
+      <button class="lang-btn"        id="btnNah" onclick="setLang('nah')" aria-pressed="false">NAH</button>
     </div>
 
     <!-- <div class="topbar-progress">
@@ -413,10 +419,12 @@ html[lang="en"] .es { display:none !important; }
       <div class="sidebar-label">
         <span class="es">Contenidos</span>
         <span class="en">Contents</span>
+        <span class="nah">Tlen Kipia</span>
       </div>
       <h2 class="sidebar-heading">
         <span class="es">Módulos</span>
         <span class="en">Modules</span>
+        <span class="nah">Modulohmeh</span>
       </h2>
     </div>
     <ul class="module-list" id="moduleList"></ul>
@@ -438,13 +446,16 @@ html[lang="en"] .es { display:none !important; }
       <h1 class="welcome-heading">
         <span class="es">¡Bienvenido al material didáctico sobre <span>fútbol adaptado</span>!</span>
         <span class="en">Welcome to the teaching material about <span>adapted Football</span>!</span>
+        <span class="nah">¡Ximopanolti itech tlamachtilamatl itech <span>fútbol tlacencauhtli</span>!</span>
       </h1>
       <p class="welcome-body">
         <span class="es">Selecciona un tema en el panel izquierdo para empezar a explorar el material.</span>
         <span class="en">Select a topic in the left panel to start exploring the material.</span>
+        <span class="nah">Xictlapejpeni se módulo ipan tlapechtli opochcapan para xipeuas titemoas tlamachtilamatl.</span>
       </p>
       <p><span class="es">Referencias: <br>Football, I. B. (2026). Laws of the game 2026 - 2029 (International Blind Sports Federation, Ed.). <br> Football, I. B. (2024). Partially Sighted Futsal Laws of the Game (International Blind Sports Federation, Ed.). </span>
-      <span class="en">References: <br>Football, I. B. (2026). Laws of the game 2026 - 2029 (International Blind Sports Federation, Ed.). <br> Football, I. B. (2024). Partially Sighted Futsal Laws of the Game (International Blind Sports Federation, Ed.). </span></p>
+      <span class="en">References: <br>Football, I. B. (2026). Laws of the game 2026 - 2029 (International Blind Sports Federation, Ed.). <br> Football, I. B. (2024). Partially Sighted Futsal Laws of the Game (International Blind Sports Federation, Ed.). </span>
+      <span class="nah">Tlaixpantiliztli: <br>Football, I. B. (2026). Laws of the game 2026 - 2029 (International Blind Sports Federation, Ed.). <br> Football, I. B. (2024). Partially Sighted Futsal Laws of the Game (International Blind Sports Federation, Ed.). </span></p>
       
     </div>
 
@@ -728,6 +739,125 @@ const modules = [
           </button>
         </div>
       `
+    },
+    nah: {
+      title: "In Cancha",
+      subtitle: "Xiquixmati quen mopatla in tlanahuatilli itech cancha tzalan fútbol ipal ixpopoyomeh huan futsal ipal tepitzin tlachixqueh.",
+      tag: "Cancha",
+      content: `
+        <p class="flip-instruction">Xicmatoca cada tarjeta huan xiccuepa para tiquixmatiz iuhcayotl.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Quen Hueyi in Cancha</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Quen Hueyi in Cancha</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Itenamitl hueyica tzalan 38 huan 42 metros; ipatlahuaca 20 metros.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Quen kihtoa Tlanahuatilli Futsal FIFA, ipan partidos internacionales hueyicayotl ye 38 hasta 42 metros huan patlahuacayotl 20 hasta 25 metros.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tepantli Inacastlan</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tepantli Inacastlan</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tepantli 1 hasta 1.20 metros ihueyica, nochi ipan tenamitl cancha.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Amo quitenehua amatl futsal tepantin inacastlan; ipan Futsal FIFA amo onka tepantin, balón kisa ijkuak panoa tenamitl cancha.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Cancha Penal</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Cancha Penal</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Cancha penal motlalia ica ome tlaxcotoncatl 6 m mosentlalia ica se tlamelahuacayotl 3.16 m.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Ipan Futsal FIFA cancha penal motlalia ica ome tlaxcotoncatl 6 m radio, peuas ipan cada poste, mosentlalia ica se tlamelahuacayotl parejo ihuan tenamitl gol.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Yeyi Cotoncayotl (guías)</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Yeyi Cotoncayotl (guías)</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Cancha moxelohua ipan yeyi cotoncayotl 12 m (tlapiyalli, tlanepantla, tlatzacuilli) para otlayecanqui.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Amatl futsal amo quitenehua nin xelolistli (amo tequiuh; tlaahuiltihqueh amo quipiah otlayecanqui).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tlanextli</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tlanextli</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Amo motenehua se tlanextli tlacencayotl.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Moneki amo onyas tlapetlanaliztli tonatiuh noso tlahuili tlachichihualli, huan tlanextli moneki mocenpanoz nochi cancha nochipa partido.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
     }
   },
   {
@@ -993,6 +1123,125 @@ const modules = [
                   <div class="compare-item">
                     <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
                     <p>May be a color that clearly contrasts with the field and lines.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    nah: {
+      title: "In Balón",
+      subtitle: "Xiquixmati quen mopatla in tlanahuatilli itech balón tzalan fútbol ipal ixpopoyomeh huan futsal ipal tepitzin tlachixqueh.",
+      tag: "Iuhcayotl Balón",
+      content: `
+        <p class="flip-instruction">Xicmatoca cada tarjeta huan xiccuepa para tiquixmatiz iuhcayotl.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Iyahualiuhca</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Iyahualiuhca</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Iyahualiuhca tzalan 60 huan 62 cm.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>62 cm. *Iyahualiuhca melahuac 60 hasta 62 cm para balón tamaño 5, huan 50 hasta 52 cm para tamaño 4 (tamaño 4 motequitiltia ipan Futsal FIFA para tlacah huehueyintin).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Etiliz</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Etiliz</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Etiliz tzalan 510 huan 540 gramos ijkuak peuas partido.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Etiliz melahuac Futsal FIFA tzalan 400 huan 440 gramos.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Presión</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Presión</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Presión 0.4 hasta 0.6 atmósferas ipan inivel mar.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Presión sansehco, 0.4 hasta 0.6 bar, quen kihtoa Futsal FIFA.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tlacaquiztli</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tlacaquiztli</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Quipia tlacaquiztli monequi itech (sonaja) para caquizti ijkuak molinia, motlaloa noso moyahualoa.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Amo moneki tlacaquiztli (tlaahuiltihqueh oc quipiah tepitzin tlachializtli).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tlapalli</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tlapalli</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Amatl amo quitenehua se tlapalli tlen monequi melahuac.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Hueliz se tlapalli tlen cualli motta tlaixnamiqui ihuan cancha huan tlahuililtin.</p>
                   </div>
                 </div>
               </span>
@@ -1272,6 +1521,125 @@ const modules = [
           </button>
         </div>
       `
+    },
+    nah: {
+      title: "Quezqui Tlaahuiltihqueh",
+      subtitle: "Xiquixmati quen mopatla in tlanahuatilli itech quezqui tlaahuiltihqueh tzalan fútbol ipal ixpopoyomeh huan futsal ipal tepitzin tlachixqueh.",
+      tag: "Quenin Mosentlalia Equipo",
+      content: `
+        <p class="flip-instruction">Xicmatoca cada tarjeta huan xiccuepa para tiquixmatiz tlen kipia.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Quezqui Tlaahuiltihqueh Ipan Cancha</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Quezqui Tlaahuiltihqueh Ipan Cancha</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Ixachi 5 ipan cancha (4 tlaahuiltihqueh + 1 tlapixqui), huan se otlayecanqui. Hasta 12 ipan amatl partido (10 + 2 tlapixqueh); hasta 15 ipan torneo.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Ipan cancha, 5 icada equipo (ihuan tlapixqui).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Quenin Motlapohuiliah Tlaahuiltihqueh</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Quenin Motlapohuiliah Tlaahuiltihqueh</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlacatzitzin: tlaahuiltihqueh B1 (senciyo ixpopoyomeh). Cihuameh: B1, B2 noso B3.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Amo miac ome tlaahuiltihqueh B3 ipan cancha sansehco; monequi hasta yeyi B2 icada competición, huan tepitzin ome B2 ijkuak peuas.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Achi Tepitzin Para Peuas Partido</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Achi Tepitzin Para Peuas Partido</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tepitzin nahui para peuas partido; ijkuak amo hasta yeyi (ihuan tlapixqui) motlalcahuia partido.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Iclasificación tlapixqui amo mopohua ipan tlatlamiliztli B2/B3 ipan cancha.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tlapatiliztin</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tlapatiliztin</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlapatiliztin amo tlatlamiliztli; ixachi macuilli oportunidad tlapatiliztli icada tlaco partido icada equipo.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Tlapatiliztin amo tlatlamiliztli ipan iquin partido, quen kihtoa Tlanahuatilli Futsal FIFA.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tlapixqui</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tlapixqui</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlapixqui hueliz tlachixqui noso B2/B3.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Onka "Power Play": se tlaahuiltihqui B2 noso B3 hueliz calaqui quen tlapixqui tla equipo tlatlaniloa ica se gol noso miac.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
     }
   },
   {
@@ -1537,6 +1905,125 @@ const modules = [
                   <div class="compare-item">
                     <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
                     <p>In "Power Play," bibs are not permitted under any circumstances; the player must dress according to Laws 3 and 4 of FIFA Futsal.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    nah: {
+      title: "Tlatquitl Ahuiliztli",
+      subtitle: "Xiquixmati quen mopatla in tlanahuatilli itech tlaquentli huan tlatquitl tzalan fútbol ipal ixpopoyomeh huan futsal ipal tepitzin tlachixqueh.",
+      tag: "Tlatquitl",
+      content: `
+        <p class="flip-instruction">Xicmatoca cada tarjeta huan xiccuepa para tiquixmatiz tlen kipia.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Ixtapachohli huan Parches</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Ixtapachohli huan Parches</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Moneki ixtapachohli homologado IBSA, huan parches ipan ome ixtelolomeh.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Amo moneki ixtapachohli nion parches (tlaahuiltihqueh quipiah tepitzin tlachializtli, amo senciyo ixpopoyomeh).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Espinilleras</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Espinilleras</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Espinilleras moneki mocahuas nochi itzalan medias.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Amatl futsal amo quitenehua tlatquitl tlacencayotl; motlanahuatilia ica Futsal FIFA, tlen no moneki espinilleras itzalan medias.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Tlapohualli huan Brazalete</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Tlapohualli huan Brazalete</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlapohualli 1 hasta 99, ica tlapalli tlen tlaixnamiqui camisa.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Tlaahuiltihqueh B3 moneki quitquiah brazalete ipan macuil yecapan, ica tlapalli occe camisa huan brazalete capitán.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Cactli huan Brazalete Capitán</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Cactli huan Brazalete Capitán</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Cactli lona noso ehuatl yamanic, amo ica tacos moldeados.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Brazaletes capitán moneki ipan macuil opochcapan (para moixnextia itech brazalete B3).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Itlaquen Tlapixqui</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Itlaquen Tlapixqui</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlapixqui hueliz quitquis calzón huehueyac.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Ipan "Power Play" amo moneki petos (bibs) itla ica; tlaahuiltihqui moneki motlaquentiz quen kihtoa Tlanahuatilli 3 huan 4 Futsal FIFA.</p>
                   </div>
                 </div>
               </span>
@@ -1816,6 +2303,125 @@ const modules = [
           </button>
         </div>
       `
+    },
+    nah: {
+      title: "Quenin Motlalia Gol",
+      subtitle: "Xiquixmati quen mopatla in tlanahuatilli itech quenin motlalia gol tzalan fútbol ipal ixpopoyomeh huan futsal ipal tepitzin tlachixqueh.",
+      tag: "Tlanahuatilli Gol",
+      content: `
+        <p class="flip-instruction">Xicmatoca cada tarjeta huan xiccuepa para tiquixmatiz tlen kipia.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Gol Melahuac</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Gol Melahuac</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Gol melahuac tla balón panoa nochi tenamitl tzalan postes huan itzintlan travesaño, macahmo omotlaz noso omopan ica ma noso mahuitl.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Amatl futsal amo quitenehua método sansehco; ipan Futsal FIFA sansehco tlanahuatilli: gol ijkuak nochi balón panoa tenamitl gol, tzalan postes huan itzintlan travesaño.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Balón Tlen Quimatoca Árbitro</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Balón Tlen Quimatoca Árbitro</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tla balón quimatoca árbitro huan calaqui melahuac ipan gol, amo motemaca gol; peuas occepa ica balón itlalpan.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Amatl futsal amo quitenehua ini ocachi.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Quenin Tlami Partido</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Quenin Tlami Partido</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlatlanilo equipo tlen miac gol quipia; tla sansehco, empate.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Sansehco tlanahuatilli ipan Futsal FIFA (amo motenehua ipan amatl IBSA futsal).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Igol Tlapixqui</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Igol Tlapixqui</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Tlapixqui hueliz kichihuas gol quen occequi tlaahuiltihqui.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>Se tlapixqui tlen senciyo tlachixqui amo huelis kichihuas gol, nion ipan tanda penaltis.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">TARJETA 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Gol Ipan Peuhcayotl</span><span class="flip-card-hint">Xiccuepa ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Gol Ipan Peuhcayotl</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para Ixpopoyomeh (IBSA)</span>
+                    <p>Ipan se peuhcayotl (kick-off) hueliz motlalis gol melahuac ipan gol tlaixnamiqui.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para Tepitzin Tlachixqueh (IBSA + FIFA)</span>
+                    <p>*Ipan Futsal FIFA, gol amo hueliz motlalis melahuac ipan peuhcayotl.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
     }
   }
 ];
@@ -1848,10 +2454,12 @@ modules.forEach(mod => {
       <div class="module-name">
         <span class="es">${mod.es.title}</span>
         <span class="en">${mod.en.title}</span>
+        <span class="nah">${mod.nah.title}</span>
       </div>
       <div class="module-tag">
         <span class="es">${mod.es.tag}</span>
         <span class="en">${mod.en.tag}</span>
+        <span class="nah">${mod.nah.tag}</span>
       </div>
     </div>
     <div class="module-check">✓</div>
@@ -1873,32 +2481,38 @@ modules.forEach(mod => {
       <span class="panel-eyebrow-line"></span>
       <span class="es">Módulo ${String(mod.id).padStart(2,'0')} — ${mod.es.tag}</span>
       <span class="en">Module ${String(mod.id).padStart(2,'0')} — ${mod.en.tag}</span>
+      <span class="nah">Modulo ${String(mod.id).padStart(2,'0')} — ${mod.nah.tag}</span>
     </div>
 
     <h2 class="panel-title">
       <span class="es">${mod.es.title}</span>
       <span class="en">${mod.en.title}</span>
+      <span class="nah">${mod.nah.title}</span>
     </h2>
     <p class="panel-subtitle">
       <span class="es">${mod.es.subtitle}</span>
       <span class="en">${mod.en.subtitle}</span>
+      <span class="nah">${mod.nah.subtitle}</span>
     </p>
 
     <div class="content-body">
       <div class="es">${mod.es.content}</div>
       <div class="en">${mod.en.content}</div>
+      <div class="nah">${mod.nah.content}</div>
     </div>
 
     <div class="panel-nav">
       <button class="btn-nav" ${!hasPrev ? 'disabled' : ''} onclick="openModule(${prevId})">
         <span class="es">← Anterior</span>
         <span class="en">← Previous</span>
+        <span class="nah">← Achtopa</span>
       </button>
       <button class="btn-nav btn-nav-primary"
         ${!hasNext ? 'style="background:var(--pink);border-color:var(--pink)"' : ''}
         onclick="${hasNext ? `openModule(${nextId})` : 'finishAll()'}">
         <span class="es">${hasNext ? 'Siguiente →' : ' Finalizar'}</span>
         <span class="en">${hasNext ? 'Next →'      : ' Finish'  }</span>
+        <span class="nah">${hasNext ? 'Occe →'      : ' Tlami'   }</span>
       </button>
     </div>
   `;
@@ -1920,6 +2534,8 @@ function getNarrationText(card){
 }
 
 function speakCard(card){
+  /* Nahuatl has no audio narration */
+  if(lang === 'nah') return;
   if(!voiceEnabled || !('speechSynthesis' in window)) return;
   const text = getNarrationText(card);
   if(!text) return;
@@ -1983,8 +2599,10 @@ function setLang(l){
   document.documentElement.lang = l;
   document.getElementById('btnEs').classList.toggle('active', l === 'es');
   document.getElementById('btnEn').classList.toggle('active', l === 'en');
+  document.getElementById('btnNah').classList.toggle('active', l === 'nah');
   document.getElementById('btnEs').setAttribute('aria-pressed', l === 'es');
   document.getElementById('btnEn').setAttribute('aria-pressed', l === 'en');
+  document.getElementById('btnNah').setAttribute('aria-pressed', l === 'nah');
   if(voiceToggle){
     voiceToggle.setAttribute('aria-label', voiceEnabled
       ? (l === 'es' ? 'Desactivar narración automática' : 'Turn off automatic narration')
@@ -2040,7 +2658,7 @@ function finishAll(){
   modules.forEach(m => done.add(m.id));
   document.querySelectorAll('.module-item').forEach(el => el.classList.add('done'));
   updateProgress();
-  alert(lang === 'es' ? ' ¡Has completado todos los módulos!' : ' You have completed all modules!');
+  alert(lang === 'es' ? ' ¡Has completado todos los módulos!' : lang === 'nah' ? ' ¡Yotitlamih nochi in modulohmeh!' : ' You have completed all modules!');
 }
 
 document.getElementById('btnReset')?.addEventListener('click', () => {
