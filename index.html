@@ -1,0 +1,2059 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material Didáctico · Deporte Adaptado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root{
+  --bg:#0A0A0F; --surface:#13131B; --surface2:#1C1C28;
+  --border:#26263A; --lime:#00eeff; --lime-dim:rgba(0, 255, 255, 0.12);
+  --pink:#FF3060; --blue:#00B4FF; --text:#F2F2F7; --muted:#5C5C7A;
+  --sidebar-w:280px; --header-h:64px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+
+html, body {
+  min-height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* ── LANGUAGE VISIBILITY ─────────────────────────────────── */
+html[lang="es"] .en { display:none !important; }
+html[lang="en"] .es { display:none !important; }
+
+/* ── TOPBAR ─────────────────────────────────────────────── */
+.topbar{
+  position:fixed; top:0; left:0; right:0;
+  height:var(--header-h);
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 28px; z-index:100;
+}
+.topbar-brand{ display:flex; align-items:center; gap:14px; }
+.topbar-dot{
+  width:10px; height:10px; border-radius:50%;
+  background:var(--lime); box-shadow:0 0 10px var(--lime); flex-shrink:0;
+}
+.topbar-title{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:1rem; }
+.topbar-sub{ font-size:.75rem; color:var(--muted); margin-top:1px; }
+
+.topbar-right{ display:flex; align-items:center; gap:20px; }
+
+/* Language toggle pill */
+.lang-toggle{
+  display:flex; align-items:center;
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:99px; overflow:hidden; flex-shrink:0;
+}
+.lang-btn{
+  padding:6px 14px; font-family:'Space Grotesk',sans-serif;
+  font-weight:600; font-size:.75rem; letter-spacing:.5px;
+  border:none; background:transparent; color:var(--muted);
+  cursor:pointer; transition:all .2s;
+}
+.lang-btn.active{
+  background:var(--lime); color:#000; border-radius:99px;
+}
+
+.topbar-progress{ display:flex; align-items:center; gap:12px; font-size:.8rem; color:var(--muted); }
+.progress-bar{ width:120px; height:3px; background:var(--border); border-radius:99px; overflow:hidden; }
+.progress-fill{ height:100%; background:var(--lime); border-radius:99px; transition:width .4s ease; }
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  min-height: 100vh;
+  padding-top: var(--header-h);
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100vh - var(--header-h));
+
+  overflow: hidden;
+  align-self: start;
+}
+.sidebar-header{ padding:22px 22px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.sidebar-label{
+  font-size:.65rem; text-transform:uppercase; letter-spacing:2px;
+  color:var(--muted); font-family:'Space Grotesk',sans-serif; font-weight:600;
+}
+.sidebar-heading{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.1rem; margin-top:4px; }
+.module-list{ list-style:none; overflow-y:auto; flex:1; padding:12px 0; scrollbar-width:thin; scrollbar-color:var(--border) transparent; }
+.module-item{
+  display:flex; align-items:center; gap:14px; padding:13px 22px;
+  cursor:pointer; transition:background .2s; position:relative;
+}
+.module-item:hover{ background:var(--lime-dim); }
+.module-item.active{ background:var(--lime-dim); }
+.module-item.active::before{
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3px; background:var(--lime); border-radius:0 3px 3px 0;
+}
+.module-num{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:.75rem; color:var(--muted); width:22px; flex-shrink:0; transition:color .2s; }
+.module-item.active .module-num, .module-item:hover .module-num{ color:var(--lime); }
+.module-meta{ flex:1; min-width:0; }
+.module-name{ font-size:.88rem; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color .2s; }
+.module-item.active .module-name{ color:var(--lime); font-weight:600; }
+.module-tag{ font-size:.68rem; color:var(--muted); margin-top:1px; }
+.module-check{
+  width:18px; height:18px; border-radius:50%; border:1.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:.6rem; transition:all .2s;
+}
+.module-item.done .module-check{ background:var(--lime); border-color:var(--lime); color:#000; }
+.sidebar-footer{ padding:16px 22px; border-top:1px solid var(--border); flex-shrink:0; }
+.btn-reset{
+  width:100%; padding:10px; background:transparent; border:1px solid var(--border);
+  border-radius:8px; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:.82rem; cursor:pointer; transition:all .2s;
+}
+.btn-reset:hover{ border-color:var(--pink); color:var(--pink); }
+
+/* ── CONTENT AREA ────────────────────────────────────────── */
+.content-area {
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.deco-number{
+  position:absolute; bottom:-60px; right:-20px;
+  font-family:'Space Grotesk',sans-serif; font-weight:700;
+  font-size:28vw; line-height:1; color:rgba(255,255,255,.025);
+  pointer-events:none; user-select:none; z-index:0;
+}
+.module-panel {
+  display: none;
+  flex-direction: column;
+  padding: 48px 56px;
+  position: relative;
+  z-index: 1;
+
+  overflow: visible;
+
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.module-panel.visible{ display:flex; }
+.module-panel.fade-in{ opacity:1; }
+
+/* ── Panel internals ─────────────────────────────────────── */
+.panel-eyebrow{
+  display:flex; align-items:center; gap:10px;
+  font-size:.72rem; text-transform:uppercase; letter-spacing:2px;
+  color:var(--muted); font-family:'Space Grotesk',sans-serif; font-weight:600; margin-bottom:14px;
+}
+.panel-eyebrow-line{ display:inline-block; width:32px; height:2px; background:var(--lime); border-radius:1px; }
+.panel-title{
+  font-family:'Space Grotesk',sans-serif; font-weight:700;
+  font-size:clamp(2rem,4vw,3.2rem); line-height:1.1;
+  letter-spacing:-.5px; max-width:680px; margin-bottom:8px;
+}
+.panel-title span{ color:var(--lime); }
+.panel-subtitle{ font-size:1rem; color:var(--muted); max-width:580px; line-height:1.55; margin-bottom:36px; }
+.content-body {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 1100px;
+  width: 100%;
+}
+.text-block p{ font-size:.97rem; line-height:1.75; color:rgba(242,242,247,.85); }
+.highlight-block{
+  border-left:3px solid var(--lime); background:var(--lime-dim);
+  border-radius:0 10px 10px 0; padding:16px 20px; font-size:.95rem; line-height:1.7;
+}
+.highlight-block strong{ color:var(--lime); font-weight:600; }
+.facts-strip{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; }
+.fact-card{ background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:18px 16px; }
+.fact-value{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.8rem; color:var(--lime); line-height:1; }
+.fact-label{ font-size:.78rem; color:var(--muted); margin-top:4px; }
+.media-block{
+  border-radius:14px; overflow:hidden; background:var(--surface2); border:1px solid var(--border);
+  aspect-ratio:16/9; display:flex; align-items:center; justify-content:center;
+  font-size:.85rem; color:var(--muted); position:relative;
+}
+.media-block img, .media-block video{ width:100%; height:100%; object-fit:cover; display:block; }
+.media-placeholder-icon{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+.media-placeholder-icon svg{ opacity:.3; }
+.tags{ display:flex; flex-wrap:wrap; gap:8px; }
+.tag{ background:var(--surface2); border:1px solid var(--border); border-radius:99px; padding:5px 14px; font-size:.75rem; color:var(--muted); font-weight:500; }
+.panel-nav{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:auto; padding-top:40px; border-top:1px solid var(--border); max-width:720px;
+}
+.btn-nav{
+  display:flex; align-items:center; gap:10px; background:transparent;
+  border:1px solid var(--border); border-radius:10px; color:var(--text);
+  font-family:'DM Sans',sans-serif; font-size:.88rem; font-weight:500;
+  padding:12px 20px; cursor:pointer; transition:all .2s;
+}
+.btn-nav:hover{ border-color:var(--lime); color:var(--lime); }
+.btn-nav-primary{ background:var(--lime); border-color:var(--lime); color:#000; font-weight:600; }
+.btn-nav-primary:hover{ background:#00cbe6; border-color:#00d7e6; color:#000; }
+.btn-nav:disabled{ opacity:.3; pointer-events:none; }
+
+/* ── WELCOME SCREEN ──────────────────────────────────────── */
+.welcome-screen{
+  flex:1; display:flex; align-items:center; justify-content:center;
+  flex-direction:column; gap:24px; text-align:center; padding:40px;
+  position:relative; z-index:1;
+}
+.welcome-icon{
+  width:72px; height:72px; border-radius:50%;
+  background:var(--lime-dim); border:1px solid rgba(0, 174, 255, 0.25);
+  display:flex; align-items:center; justify-content:center; font-size:2rem;
+}
+.welcome-heading{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:2rem; letter-spacing:-.5px; }
+.welcome-heading span{ color:var(--lime); }
+.welcome-body{ font-size:.97rem; color:var(--muted); max-width:380px; line-height:1.6; }
+.btn-start{
+  padding:14px 32px; background:var(--lime); border:none; border-radius:12px;
+  color:#000; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:.95rem;
+  cursor:pointer; transition:transform .2s, box-shadow .2s;
+}
+.btn-start:hover{ transform:translateY(-2px); box-shadow:0 8px 24px rgba(206,255,0,.25); }
+
+
+/* ── FLIP CARDS: MÓDULO LA PELOTA ─────────────────────── */
+.flip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+.flip-card{
+  min-height:330px;
+  perspective:1200px;
+  cursor:pointer;
+  border:0;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  font:inherit;
+}
+.flip-card-inner{
+  display:block;
+  position:relative;
+  width:100%;
+  min-height:330px;
+  transform-style:preserve-3d;
+  transition:transform .75s cubic-bezier(.2,.8,.2,1);
+}
+.flip-card.flipped .flip-card-inner{ transform:rotateY(180deg); }
+.flip-card-front,.flip-card-back{
+  position:absolute;
+  inset:0;
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+  border-radius:18px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+}
+.flip-card-front{
+  justify-content:space-between;
+  background:linear-gradient(145deg,var(--surface2),var(--surface));
+}
+.flip-card-back{
+  transform:rotateY(180deg);
+  background:var(--surface2);
+  justify-content:flex-start;
+  overflow-y:auto;
+}
+.flip-card:hover .flip-card-front,
+.flip-card:focus-visible .flip-card-front{ border-color:var(--lime); }
+.flip-card:focus-visible{ outline:3px solid var(--lime); outline-offset:4px; border-radius:18px; }
+.flip-card-icon{
+  width:86px; height:86px; border-radius:50%;
+  display:grid; place-items:center;
+  background:var(--lime-dim); border:1px solid rgba(0, 255, 234, 0.3);
+  font-size:2.8rem;
+}
+.flip-card-number{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:.7rem; letter-spacing:2px; color:var(--muted);
+}
+.flip-card-title{
+  display:block;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:1.35rem; font-weight:700; margin-top:18px;
+}
+.flip-card-hint{ display:block; color:var(--lime); font-size:.78rem; margin-top:8px; }
+.flip-card-back h3{
+  font-family:'Space Grotesk',sans-serif;
+  color:var(--lime); font-size:1.2rem; margin-bottom:14px;
+}
+.flip-card-back p{ color:rgba(242,242,247,.84); line-height:1.65; font-size:.93rem; }
+.flip-card-back ul{ padding-left:18px; color:rgba(242,242,247,.84); line-height:1.65; font-size:.9rem; }
+.flip-card-back li+li{ margin-top:7px; }
+.flip-instruction{ color:var(--muted); font-size:.85rem; margin-bottom:16px; }
+
+/* ── COMPARISON BLOCKS (used in "El campo" cards) ───────── */
+.compare-block{ display:flex; flex-direction:column; gap:14px; }
+.compare-item p{ color:rgba(242,242,247,.84); line-height:1.6; font-size:.85rem; margin-top:6px; }
+.compare-label{
+  display:inline-block; font-family:'Space Grotesk',sans-serif;
+  font-weight:700; font-size:.66rem; letter-spacing:.4px;
+  padding:4px 10px; border-radius:99px;
+}
+.compare-label-a{ background:rgba(0,180,255,.15); color:var(--blue); border:1px solid rgba(0,180,255,.3); }
+.compare-label-b{ background:rgba(255,48,96,.15); color:var(--pink); border:1px solid rgba(255,48,96,.3); }
+
+/* ── EMPTY STATE (placeholder modules) ───────────────────── */
+.empty-state{
+  border:1px dashed var(--border); border-radius:14px;
+  padding:32px; color:var(--muted); font-size:.95rem; line-height:1.6;
+}
+@media(max-width:680px){
+  .flip-grid{ grid-template-columns:1fr; }
+  .flip-card,.flip-card-inner{ min-height:300px; }
+}
+@media(prefers-reduced-motion:reduce){ .flip-card-inner{ transition:none; } }
+
+/* ── VOICE NARRATION ───────────────────────────────────── */
+.voice-toggle{
+  display:flex; align-items:center; gap:8px;
+  padding:7px 13px; border:1px solid var(--border); border-radius:99px;
+  background:var(--surface2); color:var(--text);
+  font-family:'DM Sans',sans-serif; font-size:.76rem; font-weight:600;
+  cursor:pointer; transition:border-color .2s,color .2s,background .2s;
+}
+.voice-toggle:hover,.voice-toggle:focus-visible{ border-color:var(--lime); color:var(--lime); }
+.voice-toggle[aria-pressed="false"]{ color:var(--muted); }
+.voice-status{ width:8px; height:8px; border-radius:50%; background:var(--lime); box-shadow:0 0 8px var(--lime); }
+.voice-toggle[aria-pressed="false"] .voice-status{ background:var(--muted); box-shadow:none; }
+@media(max-width:560px){ .voice-toggle-text{ display:none; } .voice-toggle{ padding:8px 10px; } }
+
+/* ── MOBILE ──────────────────────────────────────────────── */
+@media(max-width:780px){
+  html,body{ overflow:auto; }
+  .layout{ grid-template-columns:1fr; grid-template-rows:auto 1fr; height:auto; }
+  .sidebar{ border-right:none; border-bottom:1px solid var(--border); max-height:260px; }
+  .module-panel{ padding:32px 24px; }
+  .deco-number{ font-size:45vw; }
+  .topbar-progress{ display:none; }
+  .panel-nav{ max-width:100%; }
+  .content-area{ overflow:auto; }
+}
+@media(prefers-reduced-motion:reduce){
+  .module-panel, .progress-fill, .btn-start{ transition:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <span class="topbar-dot"></span>
+    <div>
+      <div class="topbar-title">
+        <span class="es">Deporte Adaptado</span>
+        <span class="en">Adapted Sport</span>
+      </div>
+      <div class="topbar-sub">
+        <span class="es">Material Didáctico</span>
+        <span class="en">Teaching Material</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar-right">
+    <button class="voice-toggle" id="voiceToggle" type="button" aria-pressed="true" aria-label="Desactivar narración automática">
+      <span class="voice-status" aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span class="voice-toggle-text">
+        <span class="es">Voz activada</span>
+        <span class="en">Voice on</span>
+      </span>
+    </button>
+
+    <!-- Language toggle -->
+    <div class="lang-toggle" role="group" aria-label="Language / Idioma">
+      <button class="lang-btn active" id="btnEs" onclick="setLang('es')" aria-pressed="true">ES</button>
+      <button class="lang-btn"        id="btnEn" onclick="setLang('en')" aria-pressed="false">EN</button>
+    </div>
+
+    <!-- <div class="topbar-progress">
+      <span id="progressLabel">0 / 6</span>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div> -->
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-label">
+        <span class="es">Contenidos</span>
+        <span class="en">Contents</span>
+      </div>
+      <h2 class="sidebar-heading">
+        <span class="es">Módulos</span>
+        <span class="en">Modules</span>
+      </h2>
+    </div>
+    <ul class="module-list" id="moduleList"></ul>
+    <div class="sidebar-footer">
+      <!-- <button class="btn-reset" id="btnReset">
+        <span class="es">↺ Reiniciar progreso</span>
+        <span class="en">↺ Reset progress</span>
+      </button> -->
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content-area" id="contentArea">
+    <span class="deco-number" id="decoNumber"></span>
+
+    <!-- Welcome screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-icon"></div>
+      <h1 class="welcome-heading">
+        <span class="es">¡Bienvenido al material didáctico sobre <span>fútbol adaptado</span>!</span>
+        <span class="en">Welcome to the teaching material about <span>adapted Football</span>!</span>
+      </h1>
+      <p class="welcome-body">
+        <span class="es">Selecciona un tema en el panel izquierdo para empezar a explorar el material.</span>
+        <span class="en">Select a topic in the left panel to start exploring the material.</span>
+      </p>
+      <p><span class="es">Referencias: <br>Football, I. B. (2026). Laws of the game 2026 - 2029 (International Blind Sports Federation, Ed.). <br> Football, I. B. (2024). Partially Sighted Futsal Laws of the Game (International Blind Sports Federation, Ed.). </span>
+      <span class="en">References: <br>Football, I. B. (2026). Laws of the game 2026 - 2029 (International Blind Sports Federation, Ed.). <br> Football, I. B. (2024). Partially Sighted Futsal Laws of the Game (International Blind Sports Federation, Ed.). </span></p>
+      
+    </div>
+
+    <div id="panelContainer"></div>
+  </main>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   CONTENT DATA — edit here
+   Each module has es:{} and en:{} with title, subtitle, tag, content
+   ───────────────────────────────────────────────────────── */
+const modules = [
+  {
+    id: 1,
+    color: "#00B4FF",
+    es: {
+      title: "El campo",
+      subtitle: "Descubre las diferencias reglamentarias del terreno de juego entre el fútbol para ciegos y el futsal para baja visión.",
+      tag: "Terreno de juego",
+      content: `
+        <p class="flip-instruction">Haz clic en cada tarjeta para voltearla y descubrir sus características.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 01</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Dimensiones del campo</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Dimensiones del campo</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Longitud de línea de banda entre 38 y 42 metros; ancho de 20 metros.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*Según las Leyes de Futsal FIFA, en partidos internacionales la longitud oscila entre 38 y 42 metros y el ancho entre 20 y 25 metros.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 02</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Vallas laterales (kickboards)</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Vallas laterales (kickboards)</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Kickboards de 1 a 1,20 m de altura a lo largo de toda la línea de banda.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*El documento de futsal no menciona kickboards; en Futsal FIFA no existen vallas laterales, el balón sale de juego al cruzar la línea de banda.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 03</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Área penal</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Área penal</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Área penal formada por dos cuartos de círculo de 6 m unidos por una línea de 3,16 m.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*En Futsal FIFA el área penal se forma con dos cuartos de círculo de 6 m de radio trazados desde cada poste, unidos por una línea recta paralela a la línea de meta.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 04</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Zonas de guías (tercios)</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Zonas de guías (tercios)</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Campo dividido en 3 tercios de 12 m (defensivo, medio, ataque) para las zonas de guías.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>El documento de futsal no menciona esta división en tercios (no aplica; los jugadores no usan guía).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 05</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Iluminación</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Iluminación</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>No exige control especial de iluminación.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Exige evitar reflejos de luz solar o artificial y que la intensidad lumínica sea uniforme en todo el campo durante todo el partido.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    en: {
+      title: "The field",
+      subtitle: "Discover the rule differences in the playing field between blind football and low-vision futsal.",
+      tag: "Playing field",
+      content: `
+        <p class="flip-instruction">Click each card to flip it and discover its features.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Field dimensions</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Field dimensions</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Touchline length between 38 and 42 meters; width of 20 meters.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*According to the FIFA Futsal Laws, in international matches the length ranges from 38 to 42 meters and the width from 20 to 25 meters.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Sideline kickboards</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Sideline kickboards</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Kickboards 1 to 1.20 m high running along the entire touchline.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*The futsal document does not mention kickboards; in FIFA Futsal there are no side boards — the ball goes out of play when it crosses the touchline.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Penalty area</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Penalty area</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Penalty area formed by two 6 m quarter-circles joined by a 3.16 m line.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*In FIFA Futsal the penalty area is formed by two quarter-circles with a 6 m radius drawn from each post, joined by a straight line parallel to the goal line.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Guide zones (thirds)</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Guide zones (thirds)</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Field divided into three 12 m thirds (defensive, middle, attacking) for guide zones.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>The futsal document does not mention this division into thirds (not applicable; players do not use a guide).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Lighting</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Lighting</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>No special lighting control is required.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>Requires avoiding glare from sunlight or artificial light, with uniform light intensity across the whole field throughout the match.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    }
+  },
+  {
+    id: 2,
+    color: "#CEFF00",
+    es: {
+      title: "El balón",
+      subtitle: "Descubre las diferencias reglamentarias del balón entre el fútbol para ciegos y el futsal para baja visión.",
+      tag: "Características del balón",
+      content: `
+        <p class="flip-instruction">Haz clic en cada tarjeta para voltearla y descubrir sus características.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 01</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Circunferencia</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Circunferencia</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Circunferencia entre 60 y 62 cm.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>62 cm. *Circunferencia oficial entre 60 y 62 cm para el balón tamaño 5, y entre 50 y 52 cm para el tamaño 4 (el tamaño 4 es el usado en Futsal FIFA para adultos).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 02</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Peso</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Peso</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Peso entre 510 y 540 gramos al inicio del partido.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*Peso oficial de Futsal FIFA entre 400 y 440 gramos.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 03</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Presión</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Presión</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Presión de 0,4 a 0,6 atmósferas al nivel del mar.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*Presión similar, alrededor de 0,4 a 0,6 bar, según estándares de Futsal FIFA.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 04</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Sistema sonoro</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Sistema sonoro</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Lleva sistema sonoro interno obligatorio (sonaja) para que suene al rodar, botar o girar.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>No exige sistema sonoro (los jugadores tienen resto visual).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 05</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Color</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Color</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>El documento no exige un color de contraste específico.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Puede ser de un color que contraste claramente con el campo y las líneas.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    en: {
+      title: "The ball",
+      subtitle: "Discover the rule differences of the ball between blind football and low-vision futsal.",
+      tag: "Ball characteristics",
+      content: `
+        <p class="flip-instruction">Click each card to flip it and discover its features.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Circumference</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Circumference</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Circumference between 60 and 62 cm.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>62 cm. *Official circumference between 60 and 62 cm for a size 5 ball, and between 50 and 52 cm for size 4 (size 4 is the one used in adult FIFA Futsal).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Weight</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Weight</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Weight between 510 and 540 grams at the start of the match.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*Official FIFA Futsal weight between 400 and 440 grams.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Pressure</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Pressure</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Pressure of 0.4 to 0.6 atmospheres at sea level.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*Similar pressure, around 0.4 to 0.6 bar, according to FIFA Futsal standards.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Sound system</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Sound system</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Carries a mandatory internal sound system (rattle) so it sounds when rolling, bouncing, or spinning.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>Does not require a sound system (players have residual vision).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Color</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Color</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>The document does not require a specific contrasting color.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>May be a color that clearly contrasts with the field and lines.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    }
+  },
+  {
+    id: 3,
+    color: "#FF3060",
+    es: {
+      title: "Número de jugadores",
+      subtitle: "Descubre las diferencias reglamentarias sobre el número de jugadores entre fútbol para ciegos y futsal para baja visión.",
+      tag: "Composición del equipo",
+      content: `
+        <p class="flip-instruction">Haz clic en cada tarjeta para voltearla y descubrir su contenido.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 01</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Número de jugadores en cancha</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Número de jugadores en cancha</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Máximo 5 en cancha (4 de campo + 1 portero), más 1 guía. Hasta 12 en la hoja de partido (10 de campo + 2 porteros); hasta 15 en el torneo.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>En cancha, 5 por equipo (incluido portero).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 02</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Clasificación de los jugadores</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Clasificación de los jugadores</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Masculino: jugadores de campo B1 (ciegos totales). Femenino: B1, B2 o B3.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Nunca más de dos jugadores B3 en cancha a la vez; se recomienda llevar al menos 3 B2 por competición, con mínimo obligatorio de 2 B2 al inicio.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 03</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Mínimo para iniciar el partido</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Mínimo para iniciar el partido</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Mínimo 4 para iniciar partido; con menos de 3 (incluido portero) se abandona el partido.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>La clasificación del portero no cuenta para el límite de B2/B3 en cancha.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 04</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Sustituciones</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Sustituciones</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Sustituciones ilimitadas; máximo 5 oportunidades de sustitución por parte por equipo.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*Sustituciones ilimitadas en cualquier momento del partido, según las Leyes de Futsal FIFA.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 05</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">El portero</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>El portero</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>El portero puede ser vidente o B2/B3.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Existe la figura del "Power Play": un jugador B2 o B3 puede entrar como portero si el equipo va perdiendo por 1 gol o más.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    en: {
+      title: "Number of players",
+      subtitle: "Discover the rule differences on the number of players between blind football and low-vision futsal.",
+      tag: "Team composition",
+      content: `
+        <p class="flip-instruction">Click each card to flip it and discover its features.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Number of players on the field</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Number of players on the field</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Maximum 5 on the field (4 outfield players + 1 goalkeeper), plus 1 guide. Up to 12 on the match sheet (10 outfield + 2 goalkeepers); up to 15 for the tournament.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>On the field, 5 per team (including goalkeeper).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Player classification</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Player classification</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Men: outfield players B1 (totally blind). Women: B1, B2 or B3.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>Never more than two B3 players on the field at once; at least 3 B2 players per competition are recommended, with a mandatory minimum of 2 B2 at kick-off.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Minimum to start the match</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Minimum to start the match</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Minimum of 4 to start the match; with fewer than 3 (including the goalkeeper) the match is abandoned.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>The goalkeeper's classification does not count toward the B2/B3 limit on the field.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Substitutions</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Substitutions</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Unlimited substitutions; maximum of 5 substitution opportunities per half per team.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*Unlimited substitutions at any time during the match, according to the FIFA Futsal Laws of the Game.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">The goalkeeper</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>The goalkeeper</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>The goalkeeper can be sighted or B2/B3.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>There is the "Power Play" feature: a B2 or B3 player can come in as goalkeeper if the team is losing by 1 goal or more.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    }
+  },
+  {
+    id: 4,
+    color: "#00B4FF",
+    es: {
+      title: "Equipo deportivo",
+      subtitle: "Descubre las diferencias reglamentarias sobre la indumentaria y el equipamiento entre fútbol para ciegos y futsal para baja visión.",
+      tag: "Equipamiento",
+      content: `
+        <p class="flip-instruction">Haz clic en cada tarjeta para voltearla y descubrir su contenido.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 01</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Antifaz y parches</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Antifaz y parches</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Antifaz (eyeshade) homologado por IBSA obligatorio, más parches en ambos ojos.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>No exige antifaz ni parches (los jugadores tienen baja visión, no ceguera total).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 02</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Espinilleras</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Espinilleras</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Espinilleras deben quedar totalmente cubiertas por las medias.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*El documento de futsal no detalla equipo base; se rige por las Leyes de Futsal FIFA, que también exigen espinilleras cubiertas por las medias.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 03</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Dorsales y brazalete</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Dorsales y brazalete</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Dorsales del 1 al 99, en color que contraste con la camiseta.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Jugadores B3 deben llevar un brazalete en el brazo derecho, de color distinto a la camiseta y a los brazaletes de capitán.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 04</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Calzado y brazalete de capitán</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Calzado y brazalete de capitán</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Calzado de lona o cuero suave, sin tacos moldeados.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Brazaletes de capitán deben ir en el brazo izquierdo (para distinguirlos del brazalete B3).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 05</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Indumentaria del portero</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Indumentaria del portero</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>El portero puede usar pantalón largo.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>En "Power Play" no se permiten petos (bibs) bajo ninguna circunstancia; el jugador debe vestir según las Leyes 3 y 4 de Futsal FIFA.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    en: {
+      title: "Sports equipment",
+      subtitle: "Discover the rule differences on kit and equipment between blind football and low-vision futsal.",
+      tag: "Equipment",
+      content: `
+        <p class="flip-instruction">Click each card to flip it and discover its features.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Eyeshade and patches</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Eyeshade and patches</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>IBSA-approved eyeshade mandatory, plus patches on both eyes.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>Does not require an eyeshade or patches (players have low vision, not total blindness).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Shin guards</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Shin guards</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Shin guards must be fully covered by the socks.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*The futsal document does not detail base equipment; it is governed by the FIFA Futsal Laws of the Game, which also require shin guards to be covered by the socks.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Numbers and armband</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Numbers and armband</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Numbers from 1 to 99, in a color that contrasts with the shirt.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>B3 players must wear an armband on the right arm, in a color different from the shirt and from captain armbands.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Footwear and captain's armband</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Footwear and captain's armband</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>Canvas or soft leather footwear, without molded studs.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>Captain's armbands must be worn on the left arm (to distinguish them from the B3 armband).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Goalkeeper's clothing</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Goalkeeper's clothing</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>The goalkeeper may wear long trousers.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>In "Power Play," bibs are not permitted under any circumstances; the player must dress according to Laws 3 and 4 of FIFA Futsal.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    }
+  },
+  {
+    id: 5,
+    color: "#CEFF00",
+    es: {
+      title: "Método de anotación",
+      subtitle: "Descubre las diferencias reglamentarias sobre cómo se anota un gol entre fútbol para ciegos y futsal para baja visión.",
+      tag: "Reglas de gol",
+      content: `
+        <p class="flip-instruction">Haz clic en cada tarjeta para voltearla y descubrir su contenido.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 01</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Gol válido</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Gol válido</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Gol válido si el balón cruza completo la línea entre postes y bajo el travesaño, salvo que haya sido lanzado o impulsado con mano/brazo.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>El documento de futsal no describe el método general; en Futsal FIFA aplica la misma norma: gol cuando la totalidad del balón cruza la línea de meta, entre los postes y bajo el travesaño.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 02</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Balón que toca al árbitro</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Balón que toca al árbitro</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Si el balón toca a un árbitro y entra directo a portería, no se concede gol; se reanuda con balón a tierra.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>El documento de futsal no menciona esta situación específica.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 03</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Resultado del partido</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Resultado del partido</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>Gana el equipo con más goles; si hay igualdad, es empate.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*Misma norma general en Futsal FIFA (no se detalla en el documento IBSA de futsal).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 04</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Gol del portero</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Gol del portero</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>El portero puede anotar gol como cualquier jugador.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>Un portero totalmente vidente nunca puede anotar gol, ni siquiera en tandas de penaltis.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span>
+                  <span class="flip-card-number">TARJETA 05</span>
+                  <span class="flip-card-icon" aria-hidden="true"></span>
+                </span>
+                <span>
+                  <span class="flip-card-title">Gol de saque de centro</span>
+                  <span class="flip-card-hint">Haz clic para voltear ↻</span>
+                </span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Gol de saque de centro</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Fútbol para ciegos (IBSA)</span>
+                    <p>De un saque de centro (kick-off) sí se puede anotar gol directo en la portería rival.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Futsal para baja visión (IBSA + FIFA)</span>
+                    <p>*En Futsal FIFA, un gol no puede anotarse directamente desde el saque de centro.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    },
+    en: {
+      title: "Scoring method",
+      subtitle: "Discover the rule differences on how a goal is scored between blind football and low-vision futsal.",
+      tag: "Scoring rules",
+      content: `
+        <p class="flip-instruction">Click each card to flip it and discover its features.</p>
+        <div class="flip-grid">
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 01</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Valid goal</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Valid goal</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>A goal is valid if the ball fully crosses the line between the posts and under the crossbar, unless it was thrown or propelled with a hand/arm.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>The futsal document does not describe the general method; in FIFA Futsal the same rule applies: a goal is scored when the whole of the ball crosses the goal line, between the posts and under the crossbar.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 02</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Ball touching a referee</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Ball touching a referee</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>If the ball touches a referee and goes directly into the goal, no goal is awarded; play resumes with a dropped ball.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>The futsal document does not mention this specific situation.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 03</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Match result</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Match result</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>The team with more goals wins; if equal, it's a draw.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*Same general rule in FIFA Futsal (not detailed in the IBSA futsal document).</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 04</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Goalkeeper scoring</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Goalkeeper scoring</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>The goalkeeper can score a goal like any other player.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>A fully sighted goalkeeper can never score a goal, not even in a penalty shootout.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+
+          <button class="flip-card" type="button" aria-pressed="false">
+            <span class="flip-card-inner">
+              <span class="flip-card-front">
+                <span><span class="flip-card-number">CARD 05</span><span class="flip-card-icon" aria-hidden="true"></span></span>
+                <span><span class="flip-card-title">Goal from kick-off</span><span class="flip-card-hint">Click to flip ↻</span></span>
+              </span>
+              <span class="flip-card-back">
+                <h3>Goal from kick-off</h3>
+                <div class="compare-block">
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-a">Blind football (IBSA)</span>
+                    <p>A goal can be scored directly from a kick-off into the opponent's goal.</p>
+                  </div>
+                  <div class="compare-item">
+                    <span class="compare-label compare-label-b">Low-vision futsal (IBSA + FIFA)</span>
+                    <p>*In FIFA Futsal, a goal cannot be scored directly from the kick-off.</p>
+                  </div>
+                </div>
+              </span>
+            </span>
+          </button>
+        </div>
+      `
+    }
+  }
+];
+
+/* ─────────────────────────────────────────────────────────
+   STATE
+   ───────────────────────────────────────────────────────── */
+let current = null;
+let lang = 'es';
+const done = new Set();
+
+const list           = document.getElementById('moduleList');
+const panelContainer = document.getElementById('panelContainer');
+const decoNumber     = document.getElementById('decoNumber');
+const welcomeScreen  = document.getElementById('welcomeScreen');
+const progressFill   = document.getElementById('progressFill');
+const progressLabel  = document.getElementById('progressLabel');
+
+/* ─────────────────────────────────────────────────────────
+   BUILD DOM
+   ───────────────────────────────────────────────────────── */
+modules.forEach(mod => {
+  /* Sidebar item — both language strings in DOM */
+  const li = document.createElement('li');
+  li.className = 'module-item';
+  li.dataset.id = mod.id;
+  li.innerHTML = `
+    <span class="module-num">${String(mod.id).padStart(2,'0')}</span>
+    <div class="module-meta">
+      <div class="module-name">
+        <span class="es">${mod.es.title}</span>
+        <span class="en">${mod.en.title}</span>
+      </div>
+      <div class="module-tag">
+        <span class="es">${mod.es.tag}</span>
+        <span class="en">${mod.en.tag}</span>
+      </div>
+    </div>
+    <div class="module-check">✓</div>
+  `;
+  li.addEventListener('click', () => openModule(mod.id));
+  list.appendChild(li);
+
+  const prevId = mod.id - 1;
+  const nextId = mod.id + 1;
+  const hasPrev = prevId >= 1;
+  const hasNext = nextId <= modules.length;
+
+  const panel = document.createElement('div');
+  panel.className = 'module-panel';
+  panel.id = `panel-${mod.id}`;
+
+  panel.innerHTML = `
+    <div class="panel-eyebrow">
+      <span class="panel-eyebrow-line"></span>
+      <span class="es">Módulo ${String(mod.id).padStart(2,'0')} — ${mod.es.tag}</span>
+      <span class="en">Module ${String(mod.id).padStart(2,'0')} — ${mod.en.tag}</span>
+    </div>
+
+    <h2 class="panel-title">
+      <span class="es">${mod.es.title}</span>
+      <span class="en">${mod.en.title}</span>
+    </h2>
+    <p class="panel-subtitle">
+      <span class="es">${mod.es.subtitle}</span>
+      <span class="en">${mod.en.subtitle}</span>
+    </p>
+
+    <div class="content-body">
+      <div class="es">${mod.es.content}</div>
+      <div class="en">${mod.en.content}</div>
+    </div>
+
+    <div class="panel-nav">
+      <button class="btn-nav" ${!hasPrev ? 'disabled' : ''} onclick="openModule(${prevId})">
+        <span class="es">← Anterior</span>
+        <span class="en">← Previous</span>
+      </button>
+      <button class="btn-nav btn-nav-primary"
+        ${!hasNext ? 'style="background:var(--pink);border-color:var(--pink)"' : ''}
+        onclick="${hasNext ? `openModule(${nextId})` : 'finishAll()'}">
+        <span class="es">${hasNext ? 'Siguiente →' : ' Finalizar'}</span>
+        <span class="en">${hasNext ? 'Next →'      : ' Finish'  }</span>
+      </button>
+    </div>
+  `;
+  panelContainer.appendChild(panel);
+});
+
+/* Flip cards + accessible voice narration */
+const voiceToggle = document.getElementById('voiceToggle');
+let voiceEnabled = true;
+
+function stopNarration(){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function getNarrationText(card){
+  const back = card.querySelector('.flip-card-back');
+  if(!back) return '';
+  return back.innerText.replace(/\s+/g, ' ').trim();
+}
+
+function speakCard(card){
+  if(!voiceEnabled || !('speechSynthesis' in window)) return;
+  const text = getNarrationText(card);
+  if(!text) return;
+
+  stopNarration();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang === 'es' ? 'es-MX' : 'en-US';
+  utterance.rate = 0.92;
+  utterance.pitch = 1;
+  utterance.volume = 1;
+
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang.toLowerCase().startsWith(lang === 'es' ? 'es-mx' : 'en-us'))
+    || voices.find(v => v.lang.toLowerCase().startsWith(lang));
+  if(preferred) utterance.voice = preferred;
+
+  window.speechSynthesis.speak(utterance);
+}
+
+panelContainer.addEventListener('click', (event) => {
+  const card = event.target.closest('.flip-card');
+  if(!card) return;
+
+  const isFlipped = card.classList.toggle('flipped');
+  card.setAttribute('aria-pressed', String(isFlipped));
+
+  if(isFlipped){
+    document.querySelectorAll('.flip-card.flipped').forEach(other => {
+      if(other !== card){
+        other.classList.remove('flipped');
+        other.setAttribute('aria-pressed','false');
+      }
+    });
+    window.setTimeout(() => speakCard(card), 450);
+  }else{
+    stopNarration();
+  }
+});
+
+voiceToggle?.addEventListener('click', () => {
+  voiceEnabled = !voiceEnabled;
+  voiceToggle.setAttribute('aria-pressed', String(voiceEnabled));
+  voiceToggle.setAttribute('aria-label', voiceEnabled
+    ? (lang === 'es' ? 'Desactivar narración automática' : 'Turn off automatic narration')
+    : (lang === 'es' ? 'Activar narración automática' : 'Turn on automatic narration'));
+  voiceToggle.querySelector('[aria-hidden="true"] + span').textContent = voiceEnabled ? '🔊' : '🔇';
+  const text = voiceToggle.querySelector('.voice-toggle-text');
+  if(text){
+    text.querySelector('.es').textContent = voiceEnabled ? 'Voz activada' : 'Voz desactivada';
+    text.querySelector('.en').textContent = voiceEnabled ? 'Voice on' : 'Voice off';
+  }
+  if(!voiceEnabled) stopNarration();
+});
+
+/* ─────────────────────────────────────────────────────────
+   LANGUAGE SWITCH
+   ───────────────────────────────────────────────────────── */
+function setLang(l){
+  stopNarration();
+  lang = l;
+  document.documentElement.lang = l;
+  document.getElementById('btnEs').classList.toggle('active', l === 'es');
+  document.getElementById('btnEn').classList.toggle('active', l === 'en');
+  document.getElementById('btnEs').setAttribute('aria-pressed', l === 'es');
+  document.getElementById('btnEn').setAttribute('aria-pressed', l === 'en');
+  if(voiceToggle){
+    voiceToggle.setAttribute('aria-label', voiceEnabled
+      ? (l === 'es' ? 'Desactivar narración automática' : 'Turn off automatic narration')
+      : (l === 'es' ? 'Activar narración automática' : 'Turn on automatic narration'));
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
+   OPEN MODULE
+   ───────────────────────────────────────────────────────── */
+function openModule(id){
+  stopNarration();
+  welcomeScreen.style.display = 'none';
+  if(current !== null) done.add(current);
+
+  document.querySelectorAll('.module-item').forEach(el => {
+    el.classList.remove('active');
+    if(done.has(Number(el.dataset.id))) el.classList.add('done');
+  });
+
+  const activeItem = document.querySelector(`.module-item[data-id="${id}"]`);
+  if(activeItem) activeItem.classList.add('active');
+
+  document.querySelectorAll('.module-panel').forEach(p => p.classList.remove('visible','fade-in'));
+
+  const panel = document.getElementById(`panel-${id}`);
+  if(panel){
+    panel.classList.add('visible');
+    requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('fade-in')));
+    panel.scrollTop = 0;
+  }
+
+  decoNumber.textContent = String(id).padStart(2,'0');
+  current = id;
+  updateProgress();
+}
+
+/* ─────────────────────────────────────────────────────────
+   PROGRESS
+   ───────────────────────────────────────────────────────── */
+function updateProgress(){
+  const viewed = new Set(done);
+  if(current !== null) viewed.add(current);
+  const pct = Math.round((viewed.size / modules.length) * 100);
+  if(progressFill) progressFill.style.width = pct + '%';
+  if(progressLabel) progressLabel.textContent = `${viewed.size} / ${modules.length}`;
+}
+
+/* ─────────────────────────────────────────────────────────
+   FINISH / RESET
+   ───────────────────────────────────────────────────────── */
+function finishAll(){
+  modules.forEach(m => done.add(m.id));
+  document.querySelectorAll('.module-item').forEach(el => el.classList.add('done'));
+  updateProgress();
+  alert(lang === 'es' ? ' ¡Has completado todos los módulos!' : ' You have completed all modules!');
+}
+
+document.getElementById('btnReset')?.addEventListener('click', () => {
+  done.clear(); current = null;
+  document.querySelectorAll('.module-item').forEach(el => el.classList.remove('active','done'));
+  document.querySelectorAll('.module-panel').forEach(p => p.classList.remove('visible','fade-in'));
+  welcomeScreen.style.display = 'flex';
+  decoNumber.textContent = '';
+  if(progressFill) progressFill.style.width = '0%';
+  if(progressLabel) progressLabel.textContent = `0 / ${modules.length}`;
+});
+
+document.getElementById('btnStart')?.addEventListener('click', () => openModule(1));
+</script>
+</body>
+</html>
